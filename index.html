@@ -348,13 +348,16 @@
         .product-image-container {
             height: 220px;
             overflow: hidden;
+            cursor: pointer;
         }
         .product-card img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
         }
         .product-card:hover img {
-            animation: scroll-vertical 2s ease-in-out infinite alternate;
+            transform: scale(1.05);
         }
         @keyframes scroll-vertical {
             from {
@@ -411,13 +414,10 @@
         .partner-logo-box img {
             max-width: 100%;
             max-height: 100%;
-            filter: grayscale(100%);
-            opacity: 0.8;
-            transition: filter 0.3s, opacity 0.3s;
+            transition: transform 0.3s ease;
         }
         .partner-logo-box:hover img {
-            filter: none;
-            opacity: 1;
+            transform: scale(1.1);
         }
 
 
@@ -505,6 +505,55 @@
             transition: all 0.3s ease;
         }
 
+        /* 1. Solutions 섹션의 이미지 모달 관련 스타일 */
+        /* 기존 스크롤 애니메이션 제거 */
+        @keyframes scroll-vertical {
+            from { transform: none; }
+            to { transform: none; }
+        }
+
+        /* 이미지 모달 스타일 */
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-container.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 80vw;
+            height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 10000;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-close:hover {
+            opacity: 0.7;
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
             h1 { font-size: 2.5rem; }
@@ -588,6 +637,49 @@
             .hero-content p { font-size: 1rem; }
             .logo img { height: 45px; }
         }
+
+        /* CEO Message & 연혁 박스 스타일 통일 + 줄간격 */
+.history-unify {
+    color: var(--secondary-text) !important;
+    font-weight: 400 !important;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+.history-unify h3 {
+    color: var(--primary-text);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+.history-unify p {
+    color: var(--secondary-text) !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    line-height: 2.2 !important;
+    margin-bottom: 1rem !important;
+    font-family: var(--font-secondary) !important;
+}
+.history-unify ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.history-unify ul li {
+    margin-bottom: 0.8em;
+    color: var(--secondary-text) !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    line-height: 1.8 !important;
+    font-family: var(--font-secondary) !important;
+}
+
+/* Solutions 이미지 hover시 스크롤 애니메이션 완전 제거 */
+.product-card:hover img, .product-card img:focus { animation: none !important; }
+
+/* Solutions 이미지 클릭시 전체화면 모달 */
+.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
+.modal.active { display: flex !important; }
+.modal img { max-width: 90vw; max-height: 80vh; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); background: #fff; }
+.modal-close { position: absolute; top: 30px; right: 40px; color: #fff; font-size: 40px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -659,21 +751,35 @@
         <section id="about" class="page-section">
             <div class="container content-section">
                 <h2>About Us</h2>
-                <p>㈜위드시스는 방송/통신 분야의 풍부한 경험을 갖춘 전문 인력으로 구성되어 있으며, 고객의 요구에 부응하는 최적의 시스템과 솔루션을 제공하기 위해 끊임없이 노력하고 있습니다. 국내외 최고의 파트너사들과 협력하여 혁신적인 기술을 시장에 공급하며 고객과 함께 성장하는 기업이 되겠습니다.</p>
-                
-                <div class="about-split">
-                    <div class="ceo-message">
+                <p>㈜위드시스는 방송/통신 분야의 풍부한 경험을 갖춘 전문 인력으로 구성되어 있으며, 고객의 요구에 부응하는 최적의 시스템과 솔루션을 제공하기 위해 끊임없이 노력하고 있습니다.<br>국내외 최고의 파트너사들과 협력하여 혁신적인 기술을 시장에 공급하며 고객과 함께 성장하는 기업이 되겠습니다.</p>
+                <div class="about-split" style="gap:2rem;">
+                    <div class="ceo-message history-unify">
                         <h3>CEO Message</h3>
                         <p>2015년 7월, 디지털 방송 분야의 전문가들이 모여 설립한 (주)위드시스는 Synamedia, Commscope 등 글로벌 리더의 공식 파트너로서 최고의 기술력을 자랑합니다. 수많은 프로젝트를 성공적으로 수행하며 고객의 신뢰를 얻었으며, 급변하는 방송/통신 시장에 최적의 솔루션을 제공하기 위해 끊임없이 노력하고 있습니다.</p>
                         <p>나아가, 저희는 ESG(환경, 사회, 지배구조)를 핵심 경영이념으로 삼아 지속 가능한 성장을 추구합니다. 친환경 솔루션을 공급하고, 사회적 책임을 다하며, 투명한 경영을 실천하고 있습니다.</p>
                         <p>이러한 기술력과 신뢰, 그리고 ESG 경영을 바탕으로, 디지털 방송 분야에서 가장 모범적인 중견기업으로 성장해 나갈 것을 약속드립니다.</p>
                         <p class="ceo-signature"><strong>(주)위드시스 대표이사 이두섭</strong></p>
                     </div>
+                    <div class="history-box history-unify">
+                        <h3 style="margin-bottom:1rem;">회사 주요 연혁</h3>
+                        <ul>
+                            <li><strong>2015년:</strong> (주)위드시스 설립, 디지털 방송 솔루션 사업 시작</li>
+                            <li><strong>2016년:</strong> 티브로드(현 SK브로드밴드 CATV) 유지보수 계약 체결 및 헤드엔드 시스템 공급(~2019년)</li>
+                            <li><strong>2017년:</strong> LUMOS 공식 파트너쉽 체결, 스튜디오 조명 공급</li>
+                            <li><strong>2019년:</strong> Commscope 공식 파트너쉽 체결, CAP-1000/APEX3000 공급</li>
+                            <li><strong>2020년:</strong> Ateme 공식 파트너쉽 체결, TITAN Live 공급</li>
+                            <li><strong>2021년:</strong> Synamedia 공식 파트너쉽 체결, vDCM 공급</li>
+                            <li><strong>2020년:</strong> SK브로드밴드 CATV 유지보수 계약 체결 및 헤드엔스 시스템 공급(~2025년 현재)</li>
+                            <li><strong>2022년:</strong> 서경방송 IPTV 헤드엔드 MUX 시스템 공급</li>
+                            <li><strong>2024년:</strong> SK(주) C&C 미디어통합 유지보수 계약 체결(~2025년 현재)</li>
+                            <li><strong>2024년:</strong> SK브로드밴드 DR센터 시스템 공급</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Solutions Section -->
+        <!-- Solutions Section (이미지 클릭시 전체화면 모달) -->
         <section id="products" class="page-section">
             <div class="container content-section">
                 <h2>Solutions</h2>
@@ -684,14 +790,14 @@
                     <div class="product-grid">
                         <div class="product-card">
                             <div class="product-image-container">
-                                <img src="images/product_Synamedia_vDCM.png" alt="Synamedia vDCM">
+                                <img src="images/product_Synamedia_vDCM.png" alt="Synamedia vDCM" class="modal-trigger" style="cursor: pointer;">
                             </div>
                             <h4>Virtual DCM</h4>
                             <p>비디오, 오디오, 데이터를 효율적으로 처리하고 전송하는 Synamedia의 핵심 솔루션입니다. 높은 신뢰성과 확장성을 바탕으로 방송 품질의 서비스를 보장합니다.</p>
                         </div>
                         <div class="product-card">
                             <div class="product-image-container">
-                                <img src="images/product_Synamedia_Quortex Play.png" alt="Synamedia Quortex Play">
+                                <img src="images/product_Synamedia_Quortex Play.png" alt="Synamedia Quortex Play" class="modal-trigger" style="cursor: pointer;">
                             </div>
                             <h4>Quortex Play</h4>
                             <p>SaaS 기반의 Just-in-Time 스트리밍 솔루션으로, 라이브 이벤트, 24/7 채널 등 다양한 스트리밍 요구에 유연하게 대응합니다. 비용 효율적이며 빠른 서비스 런칭이 가능합니다.</p>
@@ -707,14 +813,14 @@
                     <div class="product-grid">
                         <div class="product-card">
                             <div class="product-image-container">
-                                <img src="images/product_Ateme_TITAN Live.png" alt="Ateme Titan Live">
+                                <img src="images/product_Ateme_TITAN Live.png" alt="Ateme Titan Live" class="modal-trigger" style="cursor: pointer;">
                             </div>
                             <h4>Titan Live</h4>
                             <p>소프트웨어 기반의 고밀도 트랜스코딩 솔루션으로, SD부터 4K UHD까지 모든 해상도의 라이브 콘텐츠를 인코딩합니다. 탁월한 비디오 품질과 낮은 지연 시간으로 최상의 시청 경험을 제공합니다.</p>
                         </div>
                         <div class="product-card">
                             <div class="product-image-container">
-                                <img src="images/product_Ateme_PILOT Manager.png" alt="Ateme PILOT Manager">
+                                <img src="images/product_Ateme_PILOT Manager.png" alt="Ateme PILOT Manager" class="modal-trigger" style="cursor: pointer;">
                             </div>
                             <h4>PILOT Manager</h4>
                             <p>Ateme의 비디오 처리 솔루션을 통합 관리하고 모니터링하는 중앙 집중식 관리 시스템입니다. 워크플로우를 자동화하고 운영 효율성을 극대화합니다.</p>
@@ -727,17 +833,17 @@
 
                 <article id="commscope" class="product-family">
                     <h3>CommScope</h3>
-                     <div class="product-grid">
+                    <div class="product-grid">
                         <div class="product-card">
                             <div class="product-image-container">
-                                <img src="images/product_Commscope_ME-7000.png" alt="CommScope ME-7000">
+                                <img src="images/product_Commscope_ME-7000.png" alt="CommScope ME-7000" class="modal-trigger" style="cursor: pointer;">
                             </div>
                             <h4>ME-7000</h4>
                             <p>고품질, 고밀도의 비디오 압축 플랫폼으로, 방송 및 멀티스크린 서비스를 위한 유연하고 확장 가능한 인코딩/트랜스코딩/스플라이싱을 지원합니다. MPEG-2, AVC, HEVC 표준을 모두 지원합니다.</p>
                         </div>
                         <div class="product-card">
                             <div class="product-image-container">
-                                <img src="images/product_Commscope_APEX3000.png" alt="CommScope APEX-3000">
+                                <img src="images/product_Commscope_APEX3000.png" alt="CommScope APEX-3000" class="modal-trigger" style="cursor: pointer;">
                             </div>
                             <h4>APEX-3000</h4>
                             <p>차세대 고밀도 유니버설 에지 QAM 솔루션으로, 비디오 및 데이터 서비스를 효율적으로 전송합니다. 높은 집적도와 낮은 전력 소비로 케이블 네트워크의 TCO를 절감합니다.</p>
@@ -747,7 +853,6 @@
                         <a href="https://www.commscope.com/" class="cta-button" target="_blank" rel="noopener noreferrer">Learn More</a>
                     </div>
                 </article>
-
             </div>
         </section>
 
@@ -782,12 +887,12 @@
             </div>
         </section>
 
-        <!-- Partners Section -->
+        <!-- Partners Section (로고 컬러, hover시 확대) -->
         <section id="partners" class="page-section">
-             <div class="container content-section">
-                 <h2>Partners & Customers</h2>
-                 <p class="section-intro">세계 최고의 기술력을 보유한 파트너사들과 함께합니다.</p>
-                 <div class="partner-logos">
+            <div class="container content-section">
+                <h2>Partners & Customers</h2>
+                <p class="section-intro">세계 최고의 기술력을 보유한 파트너사들과 함께합니다.</p>
+                <div class="partner-logos">
                     <div class="logo-row logo-row-5">
                         <div class="partner-logo-box"><img src="images/logo_Synamedia.png" alt="Synamedia"></div>
                         <div class="partner-logo-box"><img src="images/logo_ATEME.png" alt="Ateme"></div>
@@ -802,7 +907,7 @@
                         <div class="partner-logo-box"><img src="images/logo_CORETRUST.png" alt="CORETRUST"></div>
                         <div class="partner-logo-box"><img src="images/logo_KT altimedia.png" alt="KT altimedia"></div>
                     </div>
-                 </div>
+                </div>
             </div>
         </section>
 
@@ -975,5 +1080,58 @@
             });
         });
     </script>
+
+    <!-- Solutions 이미지 클릭시 전체화면 모달 -->
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Solutions 섹션의 모든 이미지에 클릭 이벤트 추가
+    const modalTriggers = document.querySelectorAll('.modal-trigger');
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalClose = modal.querySelector('.modal-close');
+
+    modalTriggers.forEach(img => {
+        img.addEventListener('click', function() {
+            modalImg.src = this.src;
+            modalImg.alt = this.alt;
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+        });
+    });
+
+    // 모달 닫기 - X 버튼 클릭
+    modalClose.addEventListener('click', function() {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+    });
+
+    // 모달 닫기 - 배경 클릭
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+    });
+
+    // ESC 키로 모달 닫기
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+    });
+});
+</script>
+
+    <!-- 전체화면 이미지 모달 -->
+    <div id="imageModal" class="modal-container">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </body>
 </html>
